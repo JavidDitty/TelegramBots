@@ -8,20 +8,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - name: Set up Oracle JDKs
-      uses: actions/setup-java@v4
-      with:
-        distribution: 'oracle'
-        java-version: |
-          17
-          15-ea
     - name: Set up OpenJDKs
       uses: actions/setup-java@v4
       with:
         distribution: 'temurin'
-        java-version: |
-          11
-          15-ea
+        java-version: 11
     - name: Install dependencies
       run: mvn -q install -Dgpg.skip
     - name: Build with Maven
@@ -29,4 +20,8 @@ jobs:
     - name: Curl Codecov
       if: ${{ success() }}
       run: bash <(curl -s https://codecov.io/bash)
-        
+    - name: Cache .m2
+      uses: actions/cache@v3
+      with:
+          key: ${{ runner.os }}-m2
+          path: $HOME/.m2
