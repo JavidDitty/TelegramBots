@@ -8,11 +8,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - name: Set up JDKs
-      uses: actions/setup-java@v3
+    - name: Set up Oracle JDKs
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'oracle'
+        java-version: |
+          11
+          15-ea
+    - name: Set up OpenJDKs
+      uses: actions/setup-java@v4
       with:
         distribution: 'temurin'
-        java-version: 11
+        java-version: |
+          11
+          15-ea
     - name: Install dependencies
       run: mvn -q install -Dgpg.skip
     - name: Build with Maven
