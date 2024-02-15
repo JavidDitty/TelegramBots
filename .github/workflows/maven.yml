@@ -6,13 +6,25 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        jdk: [ oracle_jdk_11, oracle_jdk_ea, open_jdk_11, open_jdk_ea ]
     steps:
     - uses: actions/checkout@v3
-    - name: Set up OpenJDKs
-      uses: actions/setup-java@v4
+    - run: |
+        oracle-11_url="https://download.oracle.com/otn/java/jdk/11.0.21%2B9/8819d0447e4d41b3bd1d9e1007728d17/jdk-11.0.21_linux-x64_bin.tar.gz"
+        wget -O $RUNNER_TEMP/oracle_jdk_11.tar.gz $oracle-11_url
+        oracle-ea_url="https://download.java.net/java/early_access/jdk23/8/GPL/openjdk-23-ea+8_linux-x64_bin.tar.gz"
+        wget -O $RUNNER_TEMP/oracle_jdk_ea.tar.gz $oracle-ea_url
+        openjdk-11_url="https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.10%2B9/OpenJDK11U-jdk_x64_linux_hotspot_11.0.10_9.tar.gz"
+        wget -O $RUNNER_TEMP/open_jdk_11.tar.gz $openjdk-11_url
+        openjdk-ea_url="https://download.java.net/java/early_access/jdk23/8/GPL/openjdk-23-ea+8_linux-x64_bin.tar.gz"
+        wget -O $RUNNER_TEMP/open_jdk_ea.tar.gz $openjdk-ea_url
+    - uses: actions/setup-java@v4
       with:
-        distribution: 'temurin'
-        java-version: 11
+        distribution: 'jdkfile'
+        jdkFile: ${{ runner.temp }}/${{ matrix.jdk }}.tar.gz
+        architecture: x64
     - name: Install dependencies
       run: mvn -q install -Dgpg.skip
     - name: Build with Maven
