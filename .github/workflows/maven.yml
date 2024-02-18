@@ -7,9 +7,14 @@ on:
 jobs:
   test:
     strategy:
+      fail-fast: false
       matrix:
         jdk: [oracle, zulu]
         java-version: [11, 15-ea]
+        experimental: [false]
+        include:
+        - java-version: 15-ea
+          experimental: true
     runs-on: ubuntu-latest
     steps:
     - name: checkout
