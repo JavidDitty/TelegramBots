@@ -54,7 +54,7 @@ jobs:
       env:
         webhook_url: "${{ secrets.WEBHOOK_URL }}"
         webhook_secret: "${{ secrets.WEBHOOK_SECRET }}"
-      if: "${{ webhook_url != '' }}"
+      if: "${{ env.webhook_url != '' }}"
         
 #     # This item has no matching transformer
 #     - email: false
