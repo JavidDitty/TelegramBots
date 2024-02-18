@@ -56,3 +56,9 @@ jobs:
       - name: Codecov
         if: ${{ success() }}
         run: bash <(curl -s https://codecov.io/bash)
+      - name: Webhooks
+        uses: distributhor/workflow-webhook@v3.0.2
+        env:
+          webhook_url: "${{ secrets.WEBHOOK_URL }}"
+          webhook_secret: "${{ secrets.WEBHOOK_SECRET }}"
+        if: "${{ env.webhook_url != '' }}"
